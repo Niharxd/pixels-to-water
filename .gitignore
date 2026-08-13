@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Datasets
+Dataset/
+data/raw/
+data/processed/
+train_images/
+test/
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+*.zip
+*.tar
+*.gz
+
+# Model files
+*.pth
+*.pt
+*.onnx
+*.ckpt
+
+# Environment / secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
