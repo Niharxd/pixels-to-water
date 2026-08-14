@@ -12,11 +12,10 @@ archive files, and the `Dataset/` directory.
 
 ```
 Dataset/
-└── Sorghum/
-    ├── train_images/              # Raw field RGB images
-    ├── train_cultivar_mapping.csv # Image-to-cultivar label mapping
-    ├── germplasm.csv
-    └── genotype.csv
+├── *.png                          # Raw field RGB images (flat layout)
+├── train_cultivar_mapping.csv     # Image-to-cultivar label mapping
+├── germplasm.csv
+└── season_6_aboveground_fresh_biomass_manual.csv
 ```
 
 ## What Belongs Here
