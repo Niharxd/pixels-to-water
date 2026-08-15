@@ -62,7 +62,7 @@ epochs, and random seed) to ensure a fair comparison.
 ```
 [✓] Repository initialization
 [✓] Dataset exploration
-[x] Dataset validation
+[✓] Dataset validation
 [ ] Balanced dataset creation
 [ ] Train/validation/test split
 [ ] Image preprocessing
