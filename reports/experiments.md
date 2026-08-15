@@ -38,7 +38,7 @@ fabricated values.
 
 ---
 
-## Dataset Exploration — August 14, 2026
+## Dataset Exploration - August 14, 2026
 
 ### Files examined
 
@@ -72,7 +72,7 @@ All values below come from actual inspection of the files on August 14, 2026. Fi
 
 ### Mapping quality
 
-- One row has filename `.DS_Store` with an empty cultivar label — must be excluded before training.
+- One row has filename `.DS_Store` with an empty cultivar label - must be excluded before training.
 - Duplicate image filenames: _run notebook_
 - Mapped files missing on disk: _run notebook_
 - Files on disk not in CSV: _run notebook_
@@ -94,3 +94,72 @@ All values below come from actual inspection of the files on August 14, 2026. Fi
 2. Confirm whether duplicate image filenames (if any) are intentional.
 3. Decide on image resolution for training (dimensions may vary).
 4. Determine whether unmapped images on disk should be excluded.
+
+---
+
+## Dataset Mapping Validation - August 15, 2026
+
+### Files used
+
+- `Dataset/train_cultivar_mapping.csv` (primary)
+- `Dataset/germplasm.csv` (cross-check only)
+- All PNG images in `Dataset/` (existence check)
+
+### Column names confirmed
+
+- Image filename column: `image`
+- Cultivar label column: `cultivar`
+
+### Validation results (from actual data)
+
+| Metric | Value |
+|---|---|
+| Total mapping rows | 22194 |
+| Unique mapped images | 22194 |
+| Duplicate image filenames | 0 |
+| Images with conflicting labels | 0 |
+| Missing cultivar labels | 1 |
+| Mapped images physically present | 5000 |
+| Mapped images physically missing | 17194 |
+| Unmapped physical images | 0 |
+| Valid image-cultivar pairs | 5000 |
+
+### Key findings
+
+- The mapping CSV contains 22194 rows but only 5000 images are physically present on disk. The remaining 17194 rows reference images that do not exist locally. This is expected - the local dataset is a 5000-image subset of the full Sorghum-100 dataset.
+- The `.DS_Store` row (1 row, missing cultivar) was excluded as planned.
+- No duplicate image filenames exist.
+- No conflicting labels exist. Every image maps to exactly one cultivar.
+- All 5000 physical images are present in the mapping CSV (0 unmapped physical images).
+- The validated clean mapping contains exactly 5000 image-cultivar pairs.
+
+### Validated cultivar distribution
+
+- Unique cultivars: 100
+- Min images per cultivar: 50
+- Max images per cultivar: 50
+- Mean images per cultivar: 50.0
+- Median images per cultivar: 50.0
+
+The local subset is perfectly balanced: exactly 50 images per cultivar across all 100 cultivars.
+
+### Germplasm cross-check
+
+- Identifier columns used: `cultivar` (mapping, e.g. `PI_257599`) vs `germplasmName` (germplasm, e.g. `PI257599`)
+- Normalization applied: remove underscore before comparison
+- Cultivars matched: 100 / 100
+- Cultivars unmatched: 0
+
+All 100 cultivar identifiers in the validated mapping correspond to entries in `germplasm.csv`.
+
+### Output files
+
+- `results/validated_image_cultivar_mapping.csv` - 5000 clean image-cultivar pairs
+- `results/mapping_validation_report.csv` - validation metric counts
+- `results/validated_cultivar_distribution.csv` - per-cultivar image counts
+- `results/validated_cultivar_distribution.png` - distribution chart
+- `results/validated_mapping_sample.csv` - 30-row manual verification sample
+
+### Ready for August 16
+
+The validated mapping (`results/validated_image_cultivar_mapping.csv`) is clean and ready for balanced subset creation. Since the local dataset is already perfectly balanced at 50 images per cultivar, August 16 will focus on creating the train/validation/test split from this validated mapping.

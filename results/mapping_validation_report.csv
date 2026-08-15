@@ -1,0 +1,10 @@
+metric,value
+Total mapping rows,22194
+Unique mapped images,22194
+Duplicate image filenames,0
+Images with conflicting labels,0
+Missing cultivar labels,1
+Mapped images physically present,5000
+Mapped images physically missing,17194
+Unmapped physical images,0
+Valid image-cultivar pairs,5000

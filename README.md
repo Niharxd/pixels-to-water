@@ -41,7 +41,7 @@ The first milestone is a controlled comparison of two CNN architectures:
 | EfficientNet-B0 | torchvision |
 
 Both models will be trained and evaluated on the
-**Sorghum-100 Cultivar Identification – FGVC 9** dataset.
+**Sorghum-100 Cultivar Identification - FGVC 9** dataset.
 
 The dataset contains field RGB images of sorghum plants labelled by cultivar.
 It does **not** contain biomass measurements, irrigation labels, soil data,
@@ -49,7 +49,7 @@ or weather data. It is used here for cultivar classification as the first
 step toward a broader crop monitoring pipeline.
 
 Detailed dataset statistics will be documented after the data exploration
-stage — no numbers are assumed here.
+stage - no numbers are assumed here.
 
 Both models will be trained under **identical conditions** (same subset,
 split, resolution, augmentation, optimizer, learning rate, batch size,
@@ -62,7 +62,7 @@ epochs, and random seed) to ensure a fair comparison.
 ```
 [✓] Repository initialization
 [✓] Dataset exploration
-[ ] Dataset validation
+[x] Dataset validation
 [ ] Balanced dataset creation
 [ ] Train/validation/test split
 [ ] Image preprocessing
@@ -83,7 +83,7 @@ epochs, and random seed) to ensure a fair comparison.
 ```
 pixels-to-water/
 ├── configs/          # Experiment configuration files (future)
-├── data/             # Data README only — raw files are external
+├── data/             # Data README only - raw files are external
 ├── models/           # Saved model checkpoints (git-ignored)
 ├── notebooks/        # Jupyter notebooks for exploration and analysis
 ├── reports/          # Experiment logs and findings
@@ -103,7 +103,7 @@ pixels-to-water/
 
 ## Dataset
 
-**Sorghum-100 Cultivar Identification – FGVC 9**
+**Sorghum-100 Cultivar Identification - FGVC 9**
 Source: Kaggle / FGVC Workshop 2022
 
 The raw dataset is stored **outside** this repository and is never committed

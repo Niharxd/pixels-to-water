@@ -1,0 +1,41 @@
+{
+  "exploration_date": "2026-08-14",
+  "dataset_layout": "flat \u2014 images and CSVs directly in Dataset/",
+  "png_images_on_disk": 5000,
+  "mapping_csv_rows": 22194,
+  "unique_mapped_images": 22194,
+  "unique_cultivars": 100,
+  "min_images_per_class": 134,
+  "max_images_per_class": 298,
+  "mean_images_per_class": 221.9,
+  "median_images_per_class": 235.5,
+  "missing_image_filenames": 0,
+  "missing_cultivar_labels": 1,
+  "duplicate_rows": 0,
+  "duplicate_image_filenames": 0,
+  "mapped_files_missing_on_disk": 17194,
+  "files_on_disk_not_in_csv": 0,
+  "image_sample_size": 100,
+  "width_min": 1024,
+  "width_max": 1024,
+  "width_mean": 1024.0,
+  "height_min": 1024,
+  "height_max": 1024,
+  "height_mean": 1024.0,
+  "unique_wh_combinations": 1,
+  "color_modes": [
+    "RGB"
+  ],
+  "image_formats": [
+    "PNG"
+  ],
+  "germplasm_rows": 352,
+  "biomass_rows": 711,
+  "cultivar_germplasm_overlap": 0,
+  "cultivar_biomass_overlap": 0,
+  "known_issues": [
+    "One row has filename '.DS_Store' with empty cultivar label",
+    "No genotype.csv \u2014 third file is season_6_aboveground_fresh_biomass_manual.csv",
+    "Biomass CSV relationship to image mapping requires further investigation"
+  ]
+}
