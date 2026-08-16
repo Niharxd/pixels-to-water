@@ -26,6 +26,9 @@ test/
 *.tar
 *.gz
 
+# Allow result plots
+!results/*.png
+
 # Model files
 *.pth
 *.pt

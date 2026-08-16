@@ -1,0 +1,16 @@
+Metric,Value
+Dataset version,balanced_subset_v1
+Original validated images,5000
+Number of cultivars,100
+Minimum images per cultivar,50
+Maximum images per cultivar,50
+Median images per cultivar,50.0
+Chosen images per cultivar,50
+Total selected images,5000
+Random seed,42
+Sampling method,"stratified random sample, fixed seed"
+All classes equally represented,True
+Unique images in subset,5000
+Duplicate images in subset,0
+Source mapping,results\validated_image_cultivar_mapping.csv
+Image directory,..\Dataset
