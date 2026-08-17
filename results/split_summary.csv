@@ -1,0 +1,10 @@
+Metric,Value
+Total images,5000
+Training images,4000
+Validation images,500
+Test images,500
+Number of cultivars,100
+Training percentage,80.00%
+Validation percentage,10.00%
+Test percentage,10.00%
+Random seed,42

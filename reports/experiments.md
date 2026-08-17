@@ -224,3 +224,75 @@ Reproducible from:
 
 - The local dataset is a 5000-image subset of the full Sorghum-100 dataset (22194 rows in the original mapping CSV). The full dataset would allow larger per-class samples.
 - Because the local subset is already perfectly balanced, the balanced manifest is identical to the validated mapping in terms of image count. The manifest adds `source_path` and is produced by a deterministic, seeded procedure.
+
+---
+
+## Dataset Split
+
+### Source dataset
+
+- `results/balanced_subset.csv` — 5000 images, 100 cultivars, 50 images per cultivar
+
+### Split ratio
+
+- Training   : 80%
+- Validation : 10%
+- Test       : 10%
+
+### Stratification method
+
+Scikit-learn `train_test_split` with `stratify=cultivar` applied in two passes:
+1. 80% train / 20% temp (seed 42)
+2. 50% of temp → validation / 50% → test (seed 42)
+
+This guarantees every cultivar is represented proportionally in all three splits.
+
+### Random seed
+
+42 (fixed for all future experiments using this split)
+
+### Split counts
+
+| Split      | Images | Cultivars | % of Total |
+|------------|--------|-----------|------------|
+| Training   | 4000   | 100       | 80.00%     |
+| Validation | 500    | 100       | 10.00%     |
+| Test       | 500    | 100       | 10.00%     |
+| **Total**  | **5000** | **100** | **100%**   |
+
+### Per-cultivar distribution
+
+Because the balanced subset has exactly 50 images per cultivar and 50 is evenly divisible by 10:
+
+- Training   : 40 images per cultivar (all 100 cultivars)
+- Validation : 5 images per cultivar (all 100 cultivars)
+- Test       : 5 images per cultivar (all 100 cultivars)
+
+The split is perfectly uniform across all cultivars. No class has a different count.
+
+### Leakage checks
+
+- train ∩ validation = empty ✓
+- train ∩ test = empty ✓
+- validation ∩ test = empty ✓
+- train + validation + test = balanced subset (5000 images) ✓
+- No duplicate images within any split ✓
+- Every image has exactly one cultivar ✓
+- All 100 cultivars represented in every split ✓
+
+### Output files
+
+- `results/train.csv` — 4000 rows (image, cultivar, split)
+- `results/validation.csv` — 500 rows (image, cultivar, split)
+- `results/test.csv` — 500 rows (image, cultivar, split)
+- `results/dataset_split.csv` — 5000 rows, canonical master split file
+- `results/split_class_distribution.csv` — per-cultivar counts across splits
+- `results/split_summary.csv` — aggregate metrics
+- `results/split_distribution.png` — visualization
+- `src/create_dataset_split.py` — reproducible split script
+
+### Limitations
+
+- Each split references the original image files via filename only; images are not copied.
+- With only 5 images per cultivar in validation and test, per-class evaluation metrics will have high variance. This is a consequence of the 5000-image local subset size, not a flaw in the split procedure.
+- The split is fixed. All future models (ResNet-18, EfficientNet-B0) must use this exact split without modification.
