@@ -1,0 +1,37 @@
+image_size: 224
+batch_size: 32
+num_workers: 0
+
+normalization:
+  standard: ImageNet
+  mean: [0.485, 0.456, 0.406]
+  std:  [0.229, 0.224, 0.225]
+
+train_augmentation:
+  RandomResizedCrop:
+    size: 224
+    scale: [0.8, 1.0]
+  RandomRotation:
+    degrees: 10
+  RandomHorizontalFlip: true
+  ColorJitter:
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.05
+
+val_transform:
+  Resize: 256
+  CenterCrop: 224
+
+test_transform:
+  Resize: 256
+  CenterCrop: 224
+
+notes:
+  - image_size 224 is used for both ResNet-18 and EfficientNet-B0 to enable fair comparison
+  - ImageNet normalization is applied because both models are initialized from ImageNet-pretrained weights
+  - vertical flip is omitted because field images have a consistent ground-up orientation
+  - augmentation is conservative to preserve cultivar-defining plant structures
+  - batch_size 32 is a practical baseline; optimality is not claimed
+  - normalization is applied dynamically during loading; raw images on disk are never modified

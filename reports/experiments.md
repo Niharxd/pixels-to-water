@@ -296,3 +296,97 @@ The split is perfectly uniform across all cultivars. No class has a different co
 - Each split references the original image files via filename only; images are not copied.
 - With only 5 images per cultivar in validation and test, per-class evaluation metrics will have high variance. This is a consequence of the 5000-image local subset size, not a flaw in the split procedure.
 - The split is fixed. All future models (ResNet-18, EfficientNet-B0) must use this exact split without modification.
+
+---
+
+## Image Preprocessing and Augmentation
+
+### Input resolution
+
+- 224 × 224 pixels
+- Applied to both ResNet-18 and EfficientNet-B0 to enable a fair comparison
+
+### Color format
+
+- RGB (converted from PIL on load via `.convert("RGB")`)
+
+### Normalization
+
+- Standard ImageNet normalization
+- mean = [0.485, 0.456, 0.406]
+- std  = [0.229, 0.224, 0.225]
+- Applied after tensor conversion, dynamically during loading
+- Raw images on disk are never modified
+- Rationale: both ResNet-18 and EfficientNet-B0 will be initialized from ImageNet-pretrained weights
+
+### Training augmentation pipeline
+
+| Step | Parameters | Rationale |
+|---|---|---|
+| RandomResizedCrop(224, scale=(0.8, 1.0)) | 80–100% of image area | Simulates varying camera distance and framing |
+| RandomRotation(degrees=10) | ±10° | Accounts for slight camera tilt; conservative to preserve plant structure |
+| RandomHorizontalFlip() | p=0.5 | Sorghum plants are bilaterally symmetric in the horizontal axis |
+| ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05) | Mild | Accounts for lighting variation across field sessions |
+| ToTensor() | — | Converts PIL image to float32 tensor in [0, 1] |
+| Normalize(ImageNet) | — | Shifts to ImageNet distribution |
+
+Vertical flip is omitted because field images have a consistent ground-up orientation; flipping vertically would produce unrealistic images.
+
+Augmentation is conservative. No extreme rotations, heavy distortion, random erasing, or unrealistic color transformations are used.
+
+### Validation preprocessing (deterministic)
+
+| Step | Parameters |
+|---|---|
+| Resize(256) | Resize shorter edge to 256 |
+| CenterCrop(224) | Crop center 224×224 |
+| ToTensor() | — |
+| Normalize(ImageNet) | — |
+
+### Test preprocessing (deterministic)
+
+Identical to validation preprocessing. No random operations.
+
+### Batch size
+
+- Default: 32
+- Configurable via `make_loader(batch_size=...)`
+- This is a practical baseline. Optimality is not claimed.
+
+### Class mapping strategy
+
+- Cultivar strings are sorted alphabetically and assigned integer indices 0–99
+- Mapping is derived from the training manifest only
+- Saved to `results/class_to_index.json` for reproducibility
+- Identical mapping is used for training, validation, test, ResNet-18, and EfficientNet-B0
+
+### Data leakage precautions
+
+- train ∩ validation = empty (verified)
+- train ∩ test = empty (verified)
+- validation ∩ test = empty (verified)
+- Class mapping is derived from training data only
+- Augmentation is applied only to training data
+- Validation and test transforms are deterministic
+- No images were copied, moved, or modified on disk
+- No new split was created; the canonical split from the previous stage is used unchanged
+
+### Output files
+
+- `src/preprocessing.py` — transform pipelines (train, val, test)
+- `src/dataset.py` — SorghumDataset class and DataLoader factory
+- `configs/preprocessing.yaml` — preprocessing configuration
+- `results/class_to_index.json` — deterministic cultivar → index mapping (100 classes)
+- `results/augmentation_examples.png` — original vs preprocessed vs augmented visualization
+- `notebooks/04_preprocessing_and_augmentation.ipynb` — demonstration and verification notebook
+
+### Verified
+
+- Training batch shape: [32, 3, 224, 224], dtype=float32
+- Validation batch shape: [32, 3, 224, 224], dtype=float32
+- Test batch shape: [32, 3, 224, 224], dtype=float32
+- All labels are valid integers in [0, 99]
+- val_transform is deterministic (identical tensors on repeated calls)
+- test_transform is deterministic (identical tensors on repeated calls)
+- Training augmentation is applied only to training data
+- No raw images were modified

@@ -65,7 +65,7 @@ epochs, and random seed) to ensure a fair comparison.
 [✓] Dataset validation
 [✓] Balanced dataset creation
 [✓] Train/validation/test split
-[ ] Image preprocessing
+[✓] Image preprocessing
 [ ] ResNet-18 training
 [ ] EfficientNet-B0 training
 [ ] Model comparison
