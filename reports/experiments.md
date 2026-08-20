@@ -406,3 +406,13 @@ Identical to validation preprocessing. No random operations.
 - Best validation loss: 1.078231
 - Best epoch: 20
 - Training observations: Training completed for the configured maximum of 20 epochs. The selected checkpoint is from epoch 20 based on highest validation accuracy; validation loss was used as the tie-breaker.
+
+# ResNet-18 Test Evaluation
+
+- Number of classes: 100
+- Test images: 500
+- Test accuracy: 0.686000
+- Precision: 0.725493
+- Recall: 0.686000
+- F1-score: 0.679440
+- Top-5 accuracy: 0.904000
