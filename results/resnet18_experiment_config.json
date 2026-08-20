@@ -1,0 +1,47 @@
+{
+  "model": "resnet18",
+  "pretrained_weights": "ResNet18_Weights.IMAGENET1K_V1",
+  "device": "cuda",
+  "random_seed": 42,
+  "num_classes": 100,
+  "training_samples": 4000,
+  "validation_samples": 500,
+  "input_size": [
+    3,
+    224,
+    224
+  ],
+  "loss_function": "CrossEntropyLoss",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0001,
+  "batch_size": 32,
+  "maximum_epochs": 20,
+  "epochs_completed": 20,
+  "best_epoch": 20,
+  "best_validation_accuracy": 0.718,
+  "best_validation_loss": 1.07823100233078,
+  "model_selection": "Highest validation accuracy; lowest validation loss breaks ties.",
+  "test_set_used": false,
+  "sanity_check": {
+    "training_batch_shape": [
+      32,
+      3,
+      224,
+      224
+    ],
+    "validation_batch_shape": [
+      32,
+      3,
+      224,
+      224
+    ],
+    "labels_valid": true,
+    "model_output_shape": [
+      32,
+      100
+    ],
+    "loss_calculation_works": true,
+    "backward_optimizer_step_works": true
+  }
+}
