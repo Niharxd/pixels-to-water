@@ -388,6 +388,9 @@ Identical to validation preprocessing. No random operations.
 - All labels are valid integers in [0, 99]
 - val_transform is deterministic (identical tensors on repeated calls)
 - test_transform is deterministic (identical tensors on repeated calls)
+
+---
+
 - Training augmentation is applied only to training data
 - No raw images were modified
 
@@ -416,3 +419,14 @@ Identical to validation preprocessing. No random operations.
 - Recall: 0.686000
 - F1-score: 0.679440
 - Top-5 accuracy: 0.904000
+
+---
+
+## EfficientNet-B0 Implementation
+
+- Pretrained weights: `EfficientNet_B0_Weights.IMAGENET1K_V1`
+- Input size: 224 × 224 pixels with the existing ImageNet preprocessing pipeline
+- Number of classes: 100
+- Total parameters: 4,135,648
+- Trainable parameters: 4,135,648
+- Forward-pass verification: successful; output shape was `[32, 100]`

@@ -66,6 +66,7 @@ epochs, and random seed) to ensure a fair comparison.
 [✓] Balanced dataset creation
 [✓] Train/validation/test split
 [✓] Image preprocessing
+[✓] EfficientNet-B0 implementation
 [ ] ResNet-18 training
 [ ] EfficientNet-B0 training
 [ ] Model comparison
