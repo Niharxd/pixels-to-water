@@ -430,3 +430,29 @@ Identical to validation preprocessing. No random operations.
 - Total parameters: 4,135,648
 - Trainable parameters: 4,135,648
 - Forward-pass verification: successful; output shape was `[32, 100]`
+
+# EfficientNet-B0 Training
+
+- Number of classes: 100
+- Training images: 4000
+- Validation images: 500
+- Batch size: 32
+- Learning rate: 0.0001
+- Optimizer: AdamW
+- Epochs completed: 20
+- Best validation accuracy: 0.7720
+- Best validation loss: 0.837706
+- Best epoch: 20
+
+# EfficientNet-B0 Evaluation
+
+- Test set size: 500 images
+- Test accuracy: 0.744000
+- Top-5 accuracy: 0.928000
+- Precision: 0.781190
+- Recall: 0.744000
+- F1-score: 0.739890
+- Important observations:
+  - The model was evaluated on the existing held-out test split using the deterministic test preprocessing pipeline only.
+  - The top-5 accuracy exceeds the top-1 accuracy, indicating that the correct cultivar is frequently among the model's five highest-confidence predictions.
+  - The results are based on the checkpoint saved from the trained EfficientNet-B0 run and the actual computed metrics from the complete test set.

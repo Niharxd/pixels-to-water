@@ -68,7 +68,8 @@ epochs, and random seed) to ensure a fair comparison.
 [✓] Image preprocessing
 [✓] EfficientNet-B0 implementation
 [ ] ResNet-18 training
-[ ] EfficientNet-B0 training
+[✓] EfficientNet-B0 training
+[✓] EfficientNet-B0 evaluation
 [ ] Model comparison
 [ ] Error analysis
 [ ] Best model selection
