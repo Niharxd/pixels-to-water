@@ -456,3 +456,26 @@ Identical to validation preprocessing. No random operations.
   - The model was evaluated on the existing held-out test split using the deterministic test preprocessing pipeline only.
   - The top-5 accuracy exceeds the top-1 accuracy, indicating that the correct cultivar is frequently among the model's five highest-confidence predictions.
   - The results are based on the checkpoint saved from the trained EfficientNet-B0 run and the actual computed metrics from the complete test set.
+
+  # ResNet-18 vs EfficientNet-B0 Comparison
+
+  The comparison below uses the existing test metric files only. No model was retrained or reevaluated for this comparison.
+
+  | Metric | ResNet-18 | EfficientNet-B0 |
+  |---|---:|---:|
+  | Test Accuracy | 0.686000 | 0.742000 |
+  | Precision | 0.725493 | 0.779000 |
+  | Recall | 0.686000 | 0.742000 |
+  | F1-score | 0.679440 | 0.737577 |
+  | Top-5 Accuracy | 0.904000 | 0.928000 |
+
+  | Model | Total Parameters | Trainable Parameters |
+  |---|---:|---:|
+  | ResNet-18 | 11,227,812 | 11,227,812 |
+  | EfficientNet-B0 | 4,135,648 | 4,135,648 |
+
+  EfficientNet-B0 achieved the higher test accuracy, precision, recall, F1-score, and top-5 accuracy. Under the experimental conditions used in this project, EfficientNet-B0 achieved the stronger overall classification performance. This conclusion is limited to these experiments and does not claim that the architecture is universally better.
+
+## Model Comparison Visualizations
+
+The visualization notebook displays separate percentage-formatted charts for Test Accuracy, Precision, Recall, F1-score, and Top-5 Accuracy, plus a total-parameter comparison for both models. The combined summary chart provides the main report-ready view of the five performance metrics, while the parameter chart shows that EfficientNet-B0 uses fewer total parameters than ResNet-18. All charts use the existing comparison results without retraining or reevaluation.
