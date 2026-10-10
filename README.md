@@ -87,6 +87,30 @@ The ET₀ workflow uses the FAO-56 Penman–Monteith equation. Its weather value
 
 The output is `LOW`, `MODERATE`, or `HIGH` demand plus an explanation of the rules applied. **It does not calculate an irrigation depth**, and it has not been validated against field irrigation outcomes. More detail is in [`docs/irrigation_decision_engine.md`](docs/irrigation_decision_engine.md).
 
+### Tkinter prototype walkthrough
+
+The screenshots below show the current desktop workflow in sequence: choose an image, enter a date, specify whether the image is Indoor or Outdoor, and review the resulting irrigation-demand summary. The result shown is one example from the prototype; it is not a field-validated recommendation.
+
+1. **Select a crop image.** Choose an image from the file picker.
+
+   ![Tkinter prototype: select an image](docs/tkinter-demo/01-select-image.png)
+
+2. **Enter the date.** The prompt accepts dates from `2018-01-01` through `2023-12-31` in `YYYY-MM-DD` format.
+
+   ![Tkinter prototype: date prompt](docs/tkinter-demo/02-enter-date.png)
+
+   ![Tkinter prototype: date entered](docs/tkinter-demo/03-date-entered.png)
+
+3. **Choose the growing environment.** Enter `Indoor` or `Outdoor`.
+
+   ![Tkinter prototype: environment prompt](docs/tkinter-demo/04-choose-environment.png)
+
+   ![Tkinter prototype: Indoor environment entered](docs/tkinter-demo/05-environment-entered.png)
+
+4. **Review the decision summary.** The example displays the selected image, date, environment, estimated LAI and LAI demand, weather values, ET₀ demand, rainfall, and final demand class.
+
+   ![Tkinter prototype: irrigation decision result](docs/tkinter-demo/06-irrigation-result.png)
+
 ## Repository guide
 
 | Path | Contents |
