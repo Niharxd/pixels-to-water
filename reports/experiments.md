@@ -494,7 +494,7 @@ This is the canonical and final Random Forest LAI baseline. The earlier RF evalu
 - Features: 9 RGB-derived features recomputed directly from each raw image
 - Features used: `mean_red`, `mean_green`, `mean_blue`, `std_red`, `std_green`, `std_blue`, `mean_brightness`, `green_to_red_ratio`, `green_to_blue_ratio`
 - Metadata and ground-truth measurements were not used as input features.
-- Validation was used only as a diagnostic; no extensive hyperparameter tuning or SWAP was performed.
+- Validation was used only as a diagnostic; no extensive hyperparameter tuning was performed.
 
 ### Clean split verification
 
@@ -617,58 +617,6 @@ An earlier Random Forest evaluation used a split containing identical image cont
 The final comparison artifacts are saved in `results/lai_model_comparison.csv`, `results/lai_model_comparison_mae.png`, `results/lai_model_comparison_rmse.png`, `results/lai_model_comparison_r2.png`, and `results/lai_model_prediction_comparison.png`.
 
 For plain-text compatibility, the official Random Forest R-squared is also recorded as `R2 = 0.865565`; the rejected historical value is `R2 = 0.912224`.
-
----
-
-## Project SWAP Baseline — Reference-Value Execution — September 18, 2026
-
-### Scope
-
-Notebook: `notebooks/23_swap_project_baseline.ipynb`
-
-This run validates the project SWAP working-directory layout, executable invocation, input references, output generation, and output inspection before any AI-LAI integration. Random Forest LAI, ResNet, EfficientNet, RTIST, and irrigation decision logic were not integrated.
-
-### Working case and execution
-
-- SWAP version: 4.3.0, supplied in `../SWAP_4.3.0/`
-- Clean project working directory: `swap/project_baseline/`
-- Reference case: supplied verified Hupselbrook case in `swap/hupselbrook/`
-- Reference files copied unchanged: `swap.swp`, `283.met`, `maize.crp`, `potato.crp`, `grass.crp`, and `swap.dra`
-- Simulation period in the reference input: 2002-01-01 through 2004-12-31
-- Observed SWAP stdout: `Swap normal completion!`
-- Observed process exit code: `100` (the verified SWAP normal-completion behavior)
-- `swap.ok`: successful termination marker present
-- `swap.log`: `Swap simulation okay!` present
-
-### Input provenance and completeness
-
-| Required input | Project availability | Value used by this baseline |
-|---|---|---|
-| Weather and site metadata | Missing project weather series and validated site metadata | Reference `283.met` and Hupselbrook settings |
-| Soil profile and hydraulic parameters | Missing | Reference soil section in `swap.swp` |
-| Crop parameters and schedule | LAI/plant measurements exist, but no validated SWAP crop file or schedule | Reference maize, potato, and grass crop files |
-| Simulation period | No project forcing period defined | Reference 2002-01-01 to 2004-12-31 |
-| Initial and boundary conditions | Missing project observations | Reference Hupselbrook settings |
-| Irrigation and management | Missing project schedule and decision rules | Existing fixed irrigation in the reference case; no new logic |
-
-Project parameters were not fabricated. The run is therefore an executable **reference-value baseline**, not a calibrated project-field simulation. The project SWAP input status is **PARTIAL**.
-
-### Generated outputs and inspection
-
-Generated files include `result.bal`, `result.blc`, `result_output.csv`, `swap.log`, `swap.ok`, and `swap.wrn`. The CSV was readable and contained 37 monthly reporting records from 2001-12-31 through 2004-12-31. Observed sums from the output records were:
-
-- Rainfall (`RAIN`): 236.71000 cm
-- Fixed irrigation (`IRRIG`): 8.40000 cm
-- Actual evapotranspiration (`EACT`): 40.37330 cm
-- Transpiration (`TACT`): 91.03871 cm
-- Drainage (`DRN`): 90.21937 cm
-- Storage change (`DSTOR`): 0.85929 cm
-
-These are reference-case model outputs, not project measurements. Output generation and inspection: **PASS**.
-
-### Limitations and next inputs needed
-
-Before claiming a project-specific agricultural simulation, obtain measured/project-approved weather and site metadata, a soil profile with hydraulic parameters, a validated crop parameterization and simulation period, initial and bottom boundary conditions, and documented irrigation/management data. AI-LAI integration remains **NOT STARTED**.
 
 ---
 
@@ -804,17 +752,3 @@ The reproducible notebook is `notebooks/21_lai_error_analysis.ipynb`. It saves:
 The earlier classification model-selection conclusion in this report is separate from this LAI regression conclusion.
 
 ---
-
-# SWAP 4.3.0 Baseline Setup - September 17, 2026
-
-- **SWAP version:** 4.3.0, using the official supplied distribution at `../SWAP_4.3.0`.
-- **Example case:** Official Hupselbrook case (`SWAP_4.3.0/cases/1.hupselbrook`), copied unchanged to `swap/hupselbrook/`.
-- **Executable:** `../SWAP_4.3.0/tools/SWAP/swap_4.3.0.exe`.
-- **Main input:** `swap/hupselbrook/swap.swp`.
-- **Execution command:** From `swap/hupselbrook/`, `..\..\..\SWAP_4.3.0\tools\SWAP\swap_4.3.0.exe .\swap.swp`; the bundled `run_swap.cmd` uses the equivalent distribution-relative command `..\..\tools\SWAP\swap_4.3.0.exe .\swap.swp`.
-- **Baseline result:** Succeeded. SWAP printed `Swap normal completion!`, `swap.log` contains `Swap simulation okay!`, and `swap.ok` reports `simulation succesfully terminated`.
-- **Observed process code:** `100` on the successful Windows run. The explicit SWAP completion messages and success marker were used as the success evidence.
-- **Important outputs:** `result.bal` (yearly water balance and storage), `result.blc` (detailed water balance), `result_output.csv` (requested water-balance, ET, groundwater, and solute time series), `swap.log`, `swap.ok`, and `swap.wrn`.
-- **Warnings:** `Simulation with additonal Ksat value (Ksatexm)` and `large dz (e.g. dz > 5) is not advised`. No fatal errors were observed.
-- **Notebook:** `notebooks/22_swap_baseline_setup.ipynb` reruns the executable and verifies the inputs, completion marker, warnings, and outputs.
-- **Not started:** The predicted-LAI-to-SWAP interface, RTIST, and irrigation recommendation logic remain out of scope for this baseline and are not implemented.

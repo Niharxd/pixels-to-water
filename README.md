@@ -1,4 +1,4 @@
-﻿# Pixels to Water
+# Pixels to Water
 
 Pixels to Water explores how crop images and environmental data can support crop monitoring and irrigation decision support. The repository now contains two related research tracks: sorghum cultivar classification, and lettuce Leaf Area Index (LAI) estimation with a rule-based irrigation decision prototype.
 
@@ -40,7 +40,6 @@ Read [`docs/irrigation_decision_engine.md`](docs/irrigation_decision_engine.md) 
 - [`results/`](results/) — metrics, summaries, plots, and prediction files.
 - [`reports/experiments.md`](reports/experiments.md) — experiment log and dataset validation notes.
 - [`docs/irrigation_decision_engine.md`](docs/irrigation_decision_engine.md) — decision-engine design and limitations.
-- [`SWAP_4.3.0/`](SWAP_4.3.0/) — selected SWAP 4.3.0 documentation, license, tools, and bundled utilities.
 - [`data/README.md`](data/README.md) — policy and notes for data kept outside Git.
 
 ## Data policy
