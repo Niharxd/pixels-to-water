@@ -1,122 +1,67 @@
-# Pixels to Water
-### Deep Learning-Based Crop Monitoring and Intelligent Irrigation Control
+﻿# Pixels to Water
 
-This project investigates deep-learning-based crop image analysis and will
-progressively integrate environmental information to support intelligent
-irrigation decision-making.
+Pixels to Water explores how crop images and environmental data can support crop monitoring and irrigation decision support. The repository now contains two related research tracks: sorghum cultivar classification, and lettuce Leaf Area Index (LAI) estimation with a rule-based irrigation decision prototype.
 
----
+The work is experimental. The models and thresholds have not been validated for field deployment, and the decision engine does not calculate a calibrated irrigation depth.
 
-## Overview
+## Project status
 
-The core idea is to extract meaningful visual features from crop field images
-using deep learning, then combine those features with environmental data
-(weather, soil conditions) to build a crop monitoring and irrigation system.
+### Sorghum cultivar classification
 
-**Planned high-level pipeline:**
+A balanced local subset of 5,000 sorghum field images was validated, with 50 images for each of 100 cultivar classes. The notebooks cover data checks, splitting, preprocessing, training, comparison, error analysis, and final model selection.
 
-```
-Crop Image
-     ↓
-Deep Learning Model
-     ↓
-Crop Visual Features
-     ↓
-Environmental Information
-     ↓
-Crop Monitoring
-     ↓
-Intelligent Irrigation
-```
+The evaluated ResNet-18 and EfficientNet-B0 classifiers achieved the following test results:
 
----
+| Model | Test accuracy | Top-5 accuracy | Macro F1 |
+| --- | ---: | ---: | ---: |
+| ResNet-18 | 0.686 | 0.904 | 0.679 |
+| EfficientNet-B0 | 0.742 | 0.928 | 0.738 |
 
-## Current Experimental Milestone
+EfficientNet-B0 is the current candidate based on these results. A paired significance test was not completed because aligned per-image predictions for both models are not available. See [`results/final_model_selection.json`](results/final_model_selection.json) and [`reports/experiments.md`](reports/experiments.md) for details and limitations.
 
-The first milestone is a controlled comparison of two CNN architectures:
+### Lettuce LAI estimation
 
-| Model           | Source      |
-|-----------------|-------------|
-| ResNet-18       | torchvision |
-| EfficientNet-B0 | torchvision |
+The LAI experiments use a clean 336-image split (234 training, 51 validation, 51 test samples). The current Random Forest baseline uses nine RGB summary features and achieved test MAE 0.0062, RMSE 0.0098, and R² 0.866. On the same split, the image-based ResNet-18 and EfficientNet-B0 regressors had negative test R², so they did not outperform the feature-based baseline in these experiments.
 
-Both models will be trained and evaluated on the
-**Sorghum-100 Cultivar Identification - FGVC 9** dataset.
+The trained Random Forest model and its decision-engine notebook are in [`workspace/DatasetLAI/`](workspace/DatasetLAI/). Clean-split metrics and prediction plots are in [`results/`](results/).
 
-The dataset contains field RGB images of sorghum plants labelled by cultivar.
-It does **not** contain biomass measurements, irrigation labels, soil data,
-or weather data. It is used here for cultivar classification as the first
-step toward a broader crop monitoring pipeline.
+### Irrigation decision prototype
 
-Detailed dataset statistics will be documented after the data exploration
-stage - no numbers are assumed here.
+The prototype combines image-derived LAI with reference weather inputs. It calculates reference evapotranspiration (ET₀) using FAO-56 Penman-Monteith and classifies relative demand as LOW, MODERATE, or HIGH. The thresholds are empirical to the datasets used; they are not universal agronomic thresholds. The weather series is reference data and is not claimed to describe the lettuce experiments' actual location.
 
-Both models will be trained under **identical conditions** (same subset,
-split, resolution, augmentation, optimizer, learning rate, batch size,
-epochs, and random seed) to ensure a fair comparison.
+Read [`docs/irrigation_decision_engine.md`](docs/irrigation_decision_engine.md) for the inputs, feature extraction, thresholds, and rules. The decision engine is a transparent demonstration, not a field-validated irrigation controller.
 
----
+## Repository contents
 
-## Project Status
+- [`notebooks/`](notebooks/) — ordered experiments for sorghum classification (01–15), LAI regression (16–21), the decision engine (22), and weather/ET₀ exploration.
+- [`src/`](src/) — reusable project code.
+- [`models/`](models/) — trained PyTorch checkpoints for the classification and LAI experiments.
+- [`workspace/DatasetLAI/`](workspace/DatasetLAI/) — decision-engine notebook, MATLAB helper scripts, and Random Forest model copied from the surrounding workspace.
+- [`results/`](results/) — metrics, summaries, plots, and prediction files.
+- [`reports/experiments.md`](reports/experiments.md) — experiment log and dataset validation notes.
+- [`docs/irrigation_decision_engine.md`](docs/irrigation_decision_engine.md) — decision-engine design and limitations.
+- [`SWAP_4.3.0/`](SWAP_4.3.0/) — selected SWAP 4.3.0 documentation, license, tools, and bundled utilities.
+- [`data/README.md`](data/README.md) — policy and notes for data kept outside Git.
 
-```
-[✓] Repository initialization
-[✓] Dataset exploration
-[✓] Dataset validation
-[✓] Balanced dataset creation
-[✓] Train/validation/test split
-[✓] Image preprocessing
-[✓] EfficientNet-B0 implementation
-[✓] ResNet-18 training
-[✓] EfficientNet-B0 training
-[✓] EfficientNet-B0 evaluation
-[✓] Model comparison
-[✓] Statistical reliability
-[✓] Error analysis
-[✓] Final model selection
-[✓] Final ML results and documentation
-[ ] Crop monitoring integration
-[ ] Irrigation module
-[ ] Final application
+## Data policy
+
+The large image collections and dataset CSVs are intentionally not stored in this GitHub repository. This keeps the repository within GitHub's normal push limits and avoids redistributing source datasets. Obtain the source data through its original provider, follow its license and terms, and set the paths expected by the relevant notebooks before running them.
+
+Trained model checkpoints, derived metrics, and selected analysis outputs are included. Dataset files remaining in a local workspace are not part of this repository unless they are explicitly added later.
+
+## Getting started
+
+Use Python and a virtual environment, then install the listed dependencies:
+
+```bash
+python -m venv .venv
+# Activate the environment for your operating system, then:
+pip install -r requirements.txt
+jupyter lab
 ```
 
----
+Open the notebooks in sequence for the experiment you want to reproduce. Before running data-dependent notebooks, provide the required source data and update any local paths. Model checkpoints and result files correspond to specific experiments; consult their notebook and JSON metadata before comparing results.
 
-## Repository Structure
+## Reproducibility and limitations
 
-```
-pixels-to-water/
-├── configs/          # Experiment configuration files (future)
-├── data/             # Data README only - raw files are external
-├── models/           # Saved model checkpoints (git-ignored)
-├── notebooks/        # Jupyter notebooks for exploration and analysis
-├── reports/          # Experiment logs and findings
-├── results/          # Evaluation outputs, plots (result images not ignored)
-├── src/              # Source code
-│   ├── dataset.py
-│   ├── preprocessing.py
-│   ├── models.py
-│   ├── train.py
-│   └── evaluate.py
-├── .gitignore
-├── README.md
-└── requirements.txt
-```
-
----
-
-## Dataset
-
-**Sorghum-100 Cultivar Identification - FGVC 9**
-Source: Kaggle / FGVC Workshop 2022
-
-The raw dataset is stored **outside** this repository and is never committed
-to GitHub. See `data/README.md` for details.
-
----
-
-## Reproducibility
-
-All experiments will be logged in `reports/experiments.md` with full
-hyperparameter records. No results are reported until they are produced
-by an actual experiment.
+The notebooks and result metadata record the splits, seeds, metrics, and model settings available for each experiment. The datasets and split sizes differ between the sorghum classification and lettuce LAI tracks, so their scores should not be compared directly. The LAI test split is small, the decision thresholds are dataset-derived, and further validation with representative field data is needed before using the prototype for operational irrigation decisions.
