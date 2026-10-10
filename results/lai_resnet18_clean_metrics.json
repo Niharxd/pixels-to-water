@@ -1,0 +1,27 @@
+{
+  "experiment": "ResNet-18 LAI regression on verified clean split",
+  "model": "ResNet-18 ImageNet-pretrained with single-output regression layer",
+  "MAE": 0.09675356562194579,
+  "RMSE": 0.12056978997235465,
+  "R2": -19.543174904553112,
+  "train_samples": 234,
+  "validation_samples": 51,
+  "test_samples": 51,
+  "missing_image_paths": 0,
+  "invalid_targets": 0,
+  "cross_split_identical_image_hashes": 0,
+  "cross_split_duplicate_paths": 0,
+  "image_size": [
+    224,
+    224
+  ],
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "loss": "SmoothL1Loss",
+  "seed": 42,
+  "epochs_completed": 17,
+  "best_epoch": 11,
+  "best_validation_loss": 0.004697230548652656,
+  "training_seconds": 720.480292100001
+}

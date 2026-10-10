@@ -1,0 +1,27 @@
+{
+  "experiment": "EfficientNet-B0 LAI regression on verified clean split",
+  "model": "EfficientNet-B0 ImageNet-pretrained with single-output regression layer",
+  "MAE": 0.07410371782230761,
+  "RMSE": 0.08793537992525415,
+  "R2": -9.927425230494208,
+  "train_samples": 234,
+  "validation_samples": 51,
+  "test_samples": 51,
+  "missing_image_paths": 0,
+  "invalid_targets": 0,
+  "cross_split_identical_image_hashes": 0,
+  "cross_split_duplicate_paths": 0,
+  "image_size": [
+    224,
+    224
+  ],
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "loss": "SmoothL1Loss",
+  "seed": 42,
+  "epochs_completed": 19,
+  "best_epoch": 13,
+  "best_validation_loss": 0.002901210262458406,
+  "training_seconds": 690.2586085000003
+}

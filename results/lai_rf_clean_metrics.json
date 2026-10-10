@@ -1,0 +1,23 @@
+{
+  "MAE": 0.006192920454793024,
+  "RMSE": 0.009753515015343769,
+  "R2": 0.8655648426714107,
+  "features": [
+    "mean_red",
+    "mean_green",
+    "mean_blue",
+    "std_red",
+    "std_green",
+    "std_blue",
+    "mean_brightness",
+    "green_to_red_ratio",
+    "green_to_blue_ratio"
+  ],
+  "train_samples": 234,
+  "validation_samples": 51,
+  "test_samples": 51,
+  "cross_split_identical_image_hashes": 0,
+  "cross_split_duplicate_paths": 0,
+  "random_seed": 42,
+  "model": "RandomForestRegressor(default settings)"
+}

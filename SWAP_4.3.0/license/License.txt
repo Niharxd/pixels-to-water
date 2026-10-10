@@ -1,0 +1,20 @@
+Copyright 2022-2026 Wageningen UR
+
+SWAP version 4 is free software and is distributed under
+the terms of the LESSER GNU GENERAL PUBLIC LICENSE version 3, June 2007.
+(see https://www.gnu.org/licenses/gpl-3.0.html).
+
+A small number of files (TTUTIL427.LIB) are distributed under the 
+LESSER GNU GENERAL PUBLIC LICENSE version 2.1 
+(see at https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
+
+SWAP version 4 is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Public License for more details.
+
+You should have received a copy of the GNU Public License along 
+with this program (GNU_General_Public_License_version_3.md); 
+if not, write to the Free Software Foundation,
+Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+or see WWW at http://www.gnu.org/.

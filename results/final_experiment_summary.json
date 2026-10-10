@@ -1,0 +1,40 @@
+{
+  "selected_model": "EfficientNet-B0",
+  "key_metrics": {
+    "Accuracy": {
+      "ResNet-18": 0.686,
+      "EfficientNet-B0": 0.742
+    },
+    "Precision": {
+      "ResNet-18": 0.7254931457431458,
+      "EfficientNet-B0": 0.7789999999999999
+    },
+    "Recall": {
+      "ResNet-18": 0.6859999999999998,
+      "EfficientNet-B0": 0.7419999999999999
+    },
+    "F1-score": {
+      "ResNet-18": 0.6794399766899767,
+      "EfficientNet-B0": 0.737577367077367
+    },
+    "Top-5 Accuracy": {
+      "ResNet-18": 0.904,
+      "EfficientNet-B0": 0.928
+    }
+  },
+  "statistical_reliability": {
+    "test": "McNemar's test",
+    "alpha": 0.05,
+    "paired_counts": "unavailable",
+    "statistic": null,
+    "p_value": null,
+    "conclusion": "The test was not calculated because aligned per-image predictions for both models are not saved.",
+    "missing_information": "One correctness result per test image for both models, aligned by image."
+  },
+  "limitations": [
+    "The local dataset is a 5000-image subset of the full Sorghum-100 dataset.",
+    "The test set contains 500 images, with 5 images per cultivar, so per-class evaluation metrics have high variance.",
+    "McNemar's paired comparison was not calculated because aligned per-image predictions for both models are not saved."
+  ],
+  "conclusion": "The project tested ResNet-18 and EfficientNet-B0 for 100-class sorghum cultivar classification using the same existing dataset split and preprocessing. EfficientNet-B0 was selected as the final candidate because it had higher accuracy, precision, recall, F1-score, and top-5 accuracy, and fewer recorded test errors. The models were compared using existing aggregate metrics and error-analysis results; a paired McNemar test could not be performed because aligned per-image predictions were unavailable. The main evaluation limitation is the 5-image-per-cultivar test set, which makes per-class metrics high variance. The next practical step is to carry the selected EfficientNet-B0 checkpoint into application integration, without claiming universal superiority."
+}

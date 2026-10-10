@@ -1,0 +1,24 @@
+=== Compiler_Settings_4.3.0.txt ================================================================
+
+==============================================================================
+This file is part of:
+
+Program     :  SWAP
+Version     :  4.3.0
+Releasedate :  26-May-2026
+Platform    :  windows11; Linux (Ubuntu)
+
+The Windows executable swap.exe was created using:
+
+* compiler version : Intel(R) Fortran Intel(R) 64 Compiler Classic for applications running on Intel(R) 64, Version 2021.9.0 Build 20230302_000000
+* compiler options : /IC:\Users\mulde027\Software\SWAP\prog\compilerIVF\ttutil427\x64\Release /nologo /debug:full /O2 /fpp /fpscomp:general /warn:declarations 
+                     /warn:unused /warn:uncalled /warn:interfaces /Qsave /Qinit:zero /Qinit:arrays /fpe:0 /fp:source /Qfp-speculation=off /module:x64\Release\ 
+                     /object:x64\Release\ /Fdx64\Release\vc170.pdb /libs:static /threads /c /Qlocation,link,
+                     C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.41.34120\bin\HostX64\x64 /Qm64
+
+The Linux executable was created with an Intel compiler.
+Bash scripts are provided in separate file: compile_link_430.sh
+
+==============================================================================
+
+=== End of Compiler_Settings_4.3.0.txt  ========================================================

@@ -1,0 +1,29 @@
+{
+  "selected_model": "EfficientNet-B0",
+  "reason": "Based on the experiments conducted in this project, EfficientNet-B0 is selected as the final candidate because it demonstrated the strongest overall performance under the evaluated conditions. It had the higher test accuracy, precision, recall, F1-score, and top-5 accuracy, and the existing error analysis recorded 28 fewer test-set errors.",
+  "key_metrics": {
+    "ResNet-18": {
+      "Test Accuracy": 0.686,
+      "Precision": 0.7254931457431458,
+      "Recall": 0.6859999999999998,
+      "F1-score": 0.6794399766899767,
+      "Top-5 Accuracy": 0.904
+    },
+    "EfficientNet-B0": {
+      "Test Accuracy": 0.742,
+      "Precision": 0.7789999999999999,
+      "Recall": 0.7419999999999999,
+      "F1-score": 0.737577367077367,
+      "Top-5 Accuracy": 0.928
+    }
+  },
+  "statistical_reliability_result": {
+    "test": "McNemar's test",
+    "alpha": 0.05,
+    "paired_counts": "unavailable",
+    "statistic": null,
+    "p_value": null,
+    "conclusion": "The test was not calculated because aligned per-image predictions for both models are not saved.",
+    "missing_information": "One correctness result per test image for both models, aligned by image."
+  }
+}

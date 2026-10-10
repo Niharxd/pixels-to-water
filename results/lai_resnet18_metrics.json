@@ -1,0 +1,10 @@
+{
+  "MAE": 0.07097028440777929,
+  "RMSE": 0.0887904670538325,
+  "R2": -10.297672583680798,
+  "train_samples": 234,
+  "val_samples": 50,
+  "test_samples": 52,
+  "epochs_completed": 25,
+  "best_validation_loss": 0.003596152737736702
+}

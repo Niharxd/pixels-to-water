@@ -479,3 +479,342 @@ Identical to validation preprocessing. No random operations.
 ## Model Comparison Visualizations
 
 The visualization notebook displays separate percentage-formatted charts for Test Accuracy, Precision, Recall, F1-score, and Top-5 Accuracy, plus a total-parameter comparison for both models. The combined summary chart provides the main report-ready view of the five performance metrics, while the parameter chart shows that EfficientNet-B0 uses fewer total parameters than ResNet-18. All charts use the existing comparison results without retraining or reevaluation.
+
+---
+
+## Random Forest LAI Baseline — Official Clean Leakage-Free Split — September 5, 2026
+
+This is the canonical and final Random Forest LAI baseline. The earlier RF evaluation used a split containing identical image contents across splits and therefore was not used as the final benchmark. Its notebook and derived prediction/plot artifacts are obsolete and are not part of the official experiment. The legacy metrics JSON remains only because the clean notebook uses it for a recorded comparison.
+
+### Dataset and inputs
+
+- Dataset: `data/lai_train_clean.csv`, `data/lai_val_clean.csv`, `data/lai_test_clean.csv`
+- Train/Validation/Test split: 234 / 51 / 51
+- Model: `RandomForestRegressor` with default settings and `random_state=42`
+- Features: 9 RGB-derived features recomputed directly from each raw image
+- Features used: `mean_red`, `mean_green`, `mean_blue`, `std_red`, `std_green`, `std_blue`, `mean_brightness`, `green_to_red_ratio`, `green_to_blue_ratio`
+- Metadata and ground-truth measurements were not used as input features.
+- Validation was used only as a diagnostic; no extensive hyperparameter tuning or SWAP was performed.
+
+### Clean split verification
+
+| Check | Value |
+|---|---:|
+| Missing required raw RGB images | 0 |
+| Cross-split identical image hashes | 0 |
+| Cross-split duplicate paths | 0 |
+
+### Evaluation metrics
+
+- MAE: 0.006192920455
+- RMSE: 0.009753515015
+- R²: 0.865564843
+
+### Output artifacts
+
+- `notebooks/lai_baseline.ipynb`
+- `results/lai_rf_clean_metrics.json`
+- `results/lai_rf_clean_predictions.csv`
+- `results/lai_rf_clean_actual_vs_predicted.png`
+- `results/lai_rf_clean_error_distribution.png`
+
+### Conclusion
+
+The Random Forest LAI baseline was retrained using the leakage-free dataset split. These results are the official RF benchmark and replace the earlier contaminated-split RF evaluation for model comparison.
+
+---
+
+## EfficientNet-B0 LAI Regression — Clean Leakage-Free Split — September 6, 2026
+
+This is a new EfficientNet-B0 regression experiment and is clearly distinguished from the older EfficientNet-B0 classification and LAI regression results above. The older EfficientNet-B0 notebook and its artifacts were not modified.
+
+### Dataset and preprocessing
+
+- Dataset: `data/lai_train_clean.csv`, `data/lai_val_clean.csv`, `data/lai_test_clean.csv`
+- Train/Validation/Test split: 234 / 51 / 51
+- Target: actual measured `LAI` column only
+- Image paths: resolved exactly from the clean manifest values
+- Color/input: RGB, resize/crop to 224 x 224
+- Normalization: ImageNet mean/std
+- Training augmentation only: random resized crop, horizontal flip, conservative rotation, and mild color jitter
+- Validation and test preprocessing: deterministic resize and center crop
+
+### Clean split verification
+
+| Check | Value |
+|---|---:|
+| Missing image paths | 0 |
+| Invalid LAI targets | 0 |
+| Cross-split identical image hashes | 0 |
+| Cross-split duplicate paths | 0 |
+
+### Model and training
+
+- Model: ImageNet-pretrained EfficientNet-B0 with a single-output regression layer
+- Loss: `SmoothL1Loss`
+- Optimizer: `Adam`, learning rate `0.0001`
+- Batch size: 32
+- Maximum epochs: 25
+- Early stopping patience: 6 epochs
+- Random seed: 42
+- Best checkpoint: epoch 13, selected by lowest validation loss
+- Epochs completed: 19
+
+### Final clean test metrics
+
+- MAE: 0.0741037178
+- RMSE: 0.0879353799
+- R²: -9.9274252305
+
+The metrics above are from the final/best validation-loss model evaluated once on the 51-image clean test set. No extensive hyperparameter tuning was performed, and no legacy LAI split was used.
+
+### Output artifacts
+
+- `notebooks/lai_efficientnet_b0_clean_split.ipynb`
+- `results/lai_efficientnet_b0_clean_metrics.json`
+- `results/lai_efficientnet_b0_clean_predictions.csv`
+- `results/lai_efficientnet_b0_clean_training_curve.png`
+- `results/lai_efficientnet_b0_clean_actual_vs_predicted.png`
+- `results/lai_efficientnet_b0_clean_error_distribution.png`
+- `models/lai_efficientnet_b0_clean_best.pth`
+
+### Conclusion
+
+This clean EfficientNet-B0 result is a leakage-free re-evaluation and should be compared with the clean Random Forest and clean ResNet-18 experiments, not with the older EfficientNet-B0 result.
+
+---
+
+## Final LAI Model Comparison — Clean Leakage-Free Test Split — September 6, 2026
+
+This section is the final reporting comparison of the three LAI estimation models. It uses only the verified clean-split metrics and predictions; historical experiments above remain available for context but are not used as the final benchmark.
+
+### Clean split and verification
+
+- Train/Validation/Test: 234 / 51 / 51
+- Missing image paths: 0
+- Invalid targets: 0
+- Cross-split identical image hashes: 0
+- Cross-split duplicate paths: 0
+
+### Final clean test metrics
+
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Random Forest | 0.006192920455 | 0.009753515015 | 0.865564843 |
+| ResNet-18 | 0.096753565622 | 0.120569789972 | -19.543174905 |
+| EfficientNet-B0 | 0.074103717822 | 0.087935379925 | -9.927425230 |
+
+Random Forest performed best among the three evaluated models on this dataset and experimental setup. It had the lowest MAE, lowest RMSE, and highest R², with R² = 0.865565. Both CNN models produced negative R² values on the clean test set. This conclusion is limited to this dataset and experimental setup and does not claim that Random Forest is universally superior to deep learning.
+
+### Interpretation
+
+Random Forest used nine simple RGB-derived statistical features, while ResNet-18 and EfficientNet-B0 performed direct image-based regression. For this dataset and available sample size, the engineered RGB statistical representation was substantially more effective for LAI estimation than the evaluated end-to-end CNN regression approaches. Dataset size, dataset characteristics, target distribution, and model configuration can affect deep-learning performance; CNNs are not inherently unsuitable for LAI estimation.
+
+### Leakage-control note
+
+An earlier Random Forest evaluation used a split containing identical image contents across different splits and was rejected as the final benchmark. The leakage-free split was subsequently verified with zero cross-split identical image hashes and zero cross-split duplicate paths. All final model comparisons use this clean split. The official Random Forest result is R² = 0.865565; the earlier R² = 0.912224 result is not used.
+
+The final comparison artifacts are saved in `results/lai_model_comparison.csv`, `results/lai_model_comparison_mae.png`, `results/lai_model_comparison_rmse.png`, `results/lai_model_comparison_r2.png`, and `results/lai_model_prediction_comparison.png`.
+
+For plain-text compatibility, the official Random Forest R-squared is also recorded as `R2 = 0.865565`; the rejected historical value is `R2 = 0.912224`.
+
+---
+
+## Project SWAP Baseline — Reference-Value Execution — September 18, 2026
+
+### Scope
+
+Notebook: `notebooks/23_swap_project_baseline.ipynb`
+
+This run validates the project SWAP working-directory layout, executable invocation, input references, output generation, and output inspection before any AI-LAI integration. Random Forest LAI, ResNet, EfficientNet, RTIST, and irrigation decision logic were not integrated.
+
+### Working case and execution
+
+- SWAP version: 4.3.0, supplied in `../SWAP_4.3.0/`
+- Clean project working directory: `swap/project_baseline/`
+- Reference case: supplied verified Hupselbrook case in `swap/hupselbrook/`
+- Reference files copied unchanged: `swap.swp`, `283.met`, `maize.crp`, `potato.crp`, `grass.crp`, and `swap.dra`
+- Simulation period in the reference input: 2002-01-01 through 2004-12-31
+- Observed SWAP stdout: `Swap normal completion!`
+- Observed process exit code: `100` (the verified SWAP normal-completion behavior)
+- `swap.ok`: successful termination marker present
+- `swap.log`: `Swap simulation okay!` present
+
+### Input provenance and completeness
+
+| Required input | Project availability | Value used by this baseline |
+|---|---|---|
+| Weather and site metadata | Missing project weather series and validated site metadata | Reference `283.met` and Hupselbrook settings |
+| Soil profile and hydraulic parameters | Missing | Reference soil section in `swap.swp` |
+| Crop parameters and schedule | LAI/plant measurements exist, but no validated SWAP crop file or schedule | Reference maize, potato, and grass crop files |
+| Simulation period | No project forcing period defined | Reference 2002-01-01 to 2004-12-31 |
+| Initial and boundary conditions | Missing project observations | Reference Hupselbrook settings |
+| Irrigation and management | Missing project schedule and decision rules | Existing fixed irrigation in the reference case; no new logic |
+
+Project parameters were not fabricated. The run is therefore an executable **reference-value baseline**, not a calibrated project-field simulation. The project SWAP input status is **PARTIAL**.
+
+### Generated outputs and inspection
+
+Generated files include `result.bal`, `result.blc`, `result_output.csv`, `swap.log`, `swap.ok`, and `swap.wrn`. The CSV was readable and contained 37 monthly reporting records from 2001-12-31 through 2004-12-31. Observed sums from the output records were:
+
+- Rainfall (`RAIN`): 236.71000 cm
+- Fixed irrigation (`IRRIG`): 8.40000 cm
+- Actual evapotranspiration (`EACT`): 40.37330 cm
+- Transpiration (`TACT`): 91.03871 cm
+- Drainage (`DRN`): 90.21937 cm
+- Storage change (`DSTOR`): 0.85929 cm
+
+These are reference-case model outputs, not project measurements. Output generation and inspection: **PASS**.
+
+### Limitations and next inputs needed
+
+Before claiming a project-specific agricultural simulation, obtain measured/project-approved weather and site metadata, a soil profile with hydraulic parameters, a validated crop parameterization and simulation period, initial and bottom boundary conditions, and documented irrigation/management data. AI-LAI integration remains **NOT STARTED**.
+
+---
+
+# Statistical Reliability
+
+The requested paired comparison was checked against the existing saved results. The test manifest and aggregate metrics are available, but no saved per-image predictions for either model were found. The earlier evaluation notebooks hold predictions only in memory, and `results/error_analysis_summary.csv` contains aggregated directed error counts; neither can determine the paired 2x2 counts.
+
+- Test set size: 500
+- ResNet-18 correct predictions: 343
+- ResNet-18 incorrect predictions: 157
+- EfficientNet-B0 correct predictions: 371
+- EfficientNet-B0 incorrect predictions: 129
+- Paired comparison counts:
+
+  |  | EfficientNet Correct | EfficientNet Wrong |
+  |---|---:|---:|
+  | ResNet Correct | unavailable | unavailable |
+  | ResNet Wrong | unavailable | unavailable |
+
+- McNemar test statistic: not calculated
+- p-value: not calculated
+- Significance level: alpha = 0.05
+- Plain-English interpretation: There is not enough paired prediction information to perform McNemar's test. Therefore, no statistical evidence-based conclusion about a difference between the models is reported from this test.
+- Missing information: one correctness result per test image for both ResNet-18 and EfficientNet-B0, aligned by image.
+
+# Model Error Analysis
+
+The existing ResNet-18 and EfficientNet-B0 checkpoints were evaluated on the existing 500-image test split using the saved class mapping and deterministic test preprocessing. No model, dataset, preprocessing, or split was changed.
+
+## Error counts
+
+| Model | Number of Errors |
+|---|---:|
+| ResNet-18 | 157 |
+| EfficientNet-B0 | 129 |
+
+EfficientNet-B0 made 28 fewer test-set misclassifications.
+
+## Most frequent directed confusion pairs
+
+| Model | True Cultivar | Predicted Cultivar | Number of Errors |
+|---|---|---|---:|
+| ResNet-18 | PI_329299 | PI_329301 | 3 |
+| ResNet-18 | PI_152967 | PI_257599 | 2 |
+| ResNet-18 | PI_154844 | PI_152860 | 2 |
+| ResNet-18 | PI_154844 | PI_154944 | 2 |
+| ResNet-18 | PI_156178 | PI_255239 | 2 |
+| EfficientNet-B0 | PI_152730 | PI_146890 | 4 |
+| EfficientNet-B0 | PI_152751 | PI_152733 | 2 |
+| EfficientNet-B0 | PI_221651 | PI_157035 | 2 |
+| EfficientNet-B0 | PI_276837 | PI_253986 | 2 |
+| EfficientNet-B0 | PI_329300 | PI_329301 | 2 |
+
+## Comparison observations
+
+- The models shared 28 directed confusion pairs, but their complete error sets were not identical.
+- ResNet-18 had fewer errors for 24 cultivars, EfficientNet-B0 had fewer errors for 37 cultivars, and the models were tied for 39 cultivars.
+- The notebook displays eight actual misclassified images per model with true cultivar, predicted cultivar, and confidence.
+- The images and predictions do not support a specific visual explanation for the errors, so no cause is claimed.
+
+The complete observed directed confusion counts are saved in `results/error_analysis_summary.csv`.
+
+---
+
+# Final Model Selection
+
+- Selected model: EfficientNet-B0
+- Key results on the existing 500-image test set:
+
+  | Metric | ResNet-18 | EfficientNet-B0 |
+  |---|---:|---:|
+  | Test accuracy | 0.686000 | 0.742000 |
+  | Precision | 0.725493 | 0.779000 |
+  | Recall | 0.686000 | 0.742000 |
+  | F1-score | 0.679440 | 0.737577 |
+  | Top-5 accuracy | 0.904000 | 0.928000 |
+
+- Statistical reliability finding: McNemar's test was not calculated because aligned per-image predictions for both models are not saved. The paired counts, test statistic, and p-value are therefore unavailable.
+- Important error-analysis finding: EfficientNet-B0 had 129 recorded errors versus 157 for ResNet-18, 28 fewer errors overall. EfficientNet-B0 had fewer errors for 37 cultivars, ResNet-18 had fewer for 24, and 39 cultivars were tied.
+- Reason: Based on the experiments conducted in this project, EfficientNet-B0 is selected as the final candidate because it demonstrated the strongest overall performance under the evaluated conditions. This selection does not claim that the architecture is universally better and is not supported by a claim of statistically significant difference.
+- Output: `results/final_model_selection.json`
+
+---
+
+# Limitations
+
+- The local dataset is a 5000-image subset of the full Sorghum-100 dataset.
+- The test set contains 500 images, with 5 images per cultivar, so per-class evaluation metrics have high variance.
+- McNemar's paired comparison was not calculated because aligned per-image predictions for both models are not saved.
+
+# Final Conclusion
+
+The project tested ResNet-18 and EfficientNet-B0 for 100-class sorghum cultivar classification using the same existing dataset split and preprocessing. EfficientNet-B0 was selected as the final candidate because it had higher accuracy, precision, recall, F1-score, and top-5 accuracy, and fewer recorded test errors. The models were compared using existing aggregate metrics and error-analysis results; a paired McNemar test could not be performed because aligned per-image predictions were unavailable. The main evaluation limitation is the 5-image-per-cultivar test set, which makes per-class metrics high variance. The next practical step is to carry the selected EfficientNet-B0 checkpoint into application integration, without claiming universal superiority.
+
+---
+
+# LAI Error Analysis - September 16, 2026
+
+The final LAI error analysis used the existing clean test split and saved per-image predictions only. No model was retrained, tuned, or modified. The clean test set contains 51 images, and `environment` and `GrowthStage` metadata were available for all 51 rows.
+
+## Clean test metrics
+
+| Model | MAE | RMSE | R² | Mean error (predicted - actual) |
+|---|---:|---:|---:|---:|
+| Random Forest | 0.006192920 | 0.009753515 | 0.865565 | +0.003529709 |
+| ResNet-18 | 0.096753566 | 0.120569790 | -19.543175 | -0.039741542 |
+| EfficientNet-B0 | 0.074103718 | 0.087935380 | -9.927425 | -0.002105238 |
+
+Random Forest is the current LAI candidate because it has the lowest clean-test MAE and RMSE and the only positive R² among the three evaluated models. This conclusion uses the existing results without artificially improving any model.
+
+## Error behavior
+
+- Random Forest overpredicted on average, with 35 overpredictions and 16 underpredictions. Its largest MAE by actual-LAI range was 0.010401987 for `0.03-0.06` LAI; the corresponding bias was positive (+0.010401987), indicating overprediction in that range.
+- ResNet-18 underpredicted strongly overall. Its largest range MAE was 0.125610904 for `0.03-0.06` LAI, with bias -0.096064990. It also had the largest environment MAE on indoor images (0.115023891) and the largest growth-stage MAE during HeadDevelopment (0.106404496).
+- EfficientNet-B0 was close to unbiased overall, but its errors remained much larger than Random Forest. Its largest range MAE was 0.086603207 for `>0.06` LAI. It was nearly equal across environments (indoor MAE 0.074055036; outdoor MAE 0.074154347).
+- For Random Forest, indoor MAE was 0.008975665 versus 0.003298867 outdoors. By GrowthStage, its largest MAE was during HeadDevelopment (0.007780540), followed by Harvest (0.004632119) and Vegetative (0.002709518).
+
+The main weak points are therefore the Random Forest `0.03-0.06` LAI range, indoor images, and HeadDevelopment samples. These subgroup findings are descriptive and should be interpreted cautiously because the clean test set is small.
+
+## Outputs
+
+The reproducible notebook is `notebooks/21_lai_error_analysis.ipynb`. It saves:
+
+- `results/lai_error_analysis.png`
+- `results/lai_error_by_range.png`
+- `results/lai_error_by_environment.png`
+- `results/lai_error_by_growth_stage.png`
+- `results/lai_error_analysis_overall.csv`
+- `results/lai_error_by_range.csv`
+- `results/lai_error_by_environment.csv`
+- `results/lai_error_by_growth_stage.csv`
+
+The earlier classification model-selection conclusion in this report is separate from this LAI regression conclusion.
+
+---
+
+# SWAP 4.3.0 Baseline Setup - September 17, 2026
+
+- **SWAP version:** 4.3.0, using the official supplied distribution at `../SWAP_4.3.0`.
+- **Example case:** Official Hupselbrook case (`SWAP_4.3.0/cases/1.hupselbrook`), copied unchanged to `swap/hupselbrook/`.
+- **Executable:** `../SWAP_4.3.0/tools/SWAP/swap_4.3.0.exe`.
+- **Main input:** `swap/hupselbrook/swap.swp`.
+- **Execution command:** From `swap/hupselbrook/`, `..\..\..\SWAP_4.3.0\tools\SWAP\swap_4.3.0.exe .\swap.swp`; the bundled `run_swap.cmd` uses the equivalent distribution-relative command `..\..\tools\SWAP\swap_4.3.0.exe .\swap.swp`.
+- **Baseline result:** Succeeded. SWAP printed `Swap normal completion!`, `swap.log` contains `Swap simulation okay!`, and `swap.ok` reports `simulation succesfully terminated`.
+- **Observed process code:** `100` on the successful Windows run. The explicit SWAP completion messages and success marker were used as the success evidence.
+- **Important outputs:** `result.bal` (yearly water balance and storage), `result.blc` (detailed water balance), `result_output.csv` (requested water-balance, ET, groundwater, and solute time series), `swap.log`, `swap.ok`, and `swap.wrn`.
+- **Warnings:** `Simulation with additonal Ksat value (Ksatexm)` and `large dz (e.g. dz > 5) is not advised`. No fatal errors were observed.
+- **Notebook:** `notebooks/22_swap_baseline_setup.ipynb` reruns the executable and verifies the inputs, completion marker, warnings, and outputs.
+- **Not started:** The predicted-LAI-to-SWAP interface, RTIST, and irrigation recommendation logic remain out of scope for this baseline and are not implemented.

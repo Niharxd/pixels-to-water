@@ -1,0 +1,33 @@
+Package: controlR
+Version: 1.0.36
+Depends: R (>= 4.1.0)
+Imports: lubridate (>= 1.9.2), stringr (>= 1.5.0), readr (>= 2.1.4),
+        curl (>= 4.3.2), ggplot2 (>= 3.4.2)
+License: GPL (>= 3)
+Built: R 4.6.0; ; 2026-05-26 09:36:16 UTC; windows
+File: controlR_1.0.36.zip
+
+Package: KNMItools
+Version: 0.1.36
+Depends: R (>= 4.1.0)
+Imports: stringr (>= 1.5.0), fs (>= 1.5.0), readr (>= 2.1.4), lubridate
+        (>= 1.8.0), rlang (>= 1.1.6), dplyr (>= 1.0.7), tibble (>=
+        3.1.6), curl (>= 4.3.2), controlR (>= 1.0.36), ggplot2 (>=
+        3.3.5), pals (>= 1.7), ggpubr (>= 0.6.1), progress (>= 1.2.2),
+        jsonlite (>= 1.7.2)
+License: GPL (>= 3)
+Built: R 4.6.0; ; 2026-05-26 09:36:59 UTC; windows
+File: KNMItools_0.1.36.zip
+
+Package: SWAPtools
+Version: 0.2.11
+Depends: R (>= 4.1.0)
+Imports: stats (>= 4.1), grDevices (>= 4.1), stringr (>= 1.5.0), fs (>=
+        1.6.1), readr (>= 2.1.4), lubridate (>= 1.9.2), rlang (>=
+        1.1.6), controlR (>= 1.0.36), RSQLite (>= 2.3.0), readxl (>=
+        1.4.2), ggplot2 (>= 3.4.2), ggpubr (>= 0.6.1), ggpattern (>=
+        1.1.4), pals (>= 1.7), progress (>= 1.2.2), tibble (>= 3.2.1),
+        dplyr (>= 1.1.2), Metrics (>= 0.1.4), KNMItools (>= 0.1.36)
+License: GPL (>= 3)
+Built: R 4.6.0; ; 2026-05-26 09:40:59 UTC; windows
+File: SWAPtools_0.2.11.zip

@@ -1,0 +1,18 @@
+{
+  "total_records": 336,
+  "train_count": 234,
+  "validation_count": 51,
+  "test_count": 51,
+  "train_percentage": 69.642857,
+  "validation_percentage": 15.178571,
+  "test_percentage": 15.178571,
+  "random_seed": 20260905,
+  "unique_image_hashes": 301,
+  "cross_split_duplicate_hashes": 0,
+  "duplicate_paths_across_splits": 0,
+  "duplicate_filenames_across_splits": 0,
+  "records_missing_from_split": 0,
+  "records_duplicated_across_splits": 0,
+  "final_validation_status": "PASS",
+  "split_limitation": "Grouped random assignment preserves identical-content groups but does not guarantee exact counts or perfect LAI/environment balance."
+}

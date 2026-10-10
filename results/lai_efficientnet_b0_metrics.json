@@ -1,0 +1,26 @@
+{
+  "model": "EfficientNet-B0",
+  "task": "LAI regression",
+  "target_column": "LAI",
+  "pretrained_weights": "EfficientNet_B0_Weights.IMAGENET1K_V1",
+  "loss_function": "SmoothL1Loss",
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "batch_size": 32,
+  "max_epochs": 20,
+  "epochs_completed": 20,
+  "best_epoch": 19,
+  "best_validation_loss": 0.0031196048762649298,
+  "train_samples": 234,
+  "validation_samples": 50,
+  "test_samples": 52,
+  "image_size": [
+    224,
+    224
+  ],
+  "seed": 42,
+  "training_duration_seconds": 708.5235948,
+  "MAE": 0.05844482239962627,
+  "RMSE": 0.07164926969807207,
+  "R2": -6.356645682295568
+}
